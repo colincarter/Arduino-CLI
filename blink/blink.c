@@ -18,9 +18,9 @@ void loop() {
 
 
 int main(void) {
-	init();
-	setup();
-	for (;;) {
-		loop();
-	}
+  init();
+  setup();
+  for (;;) {
+    loop();
+  }
 }

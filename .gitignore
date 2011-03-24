@@ -2,6 +2,7 @@
 *.o
 *.elf
 *.d
+depends.mk
 build/*
 
 
