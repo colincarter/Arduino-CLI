@@ -1,19 +1,15 @@
 #include "WProgram.h"
 
-int ledPin = 13;
+#define LED_PIN 13
 
-void setup(void);
 void loop(void);
-
-void setup() {
-  pinMode(ledPin, OUTPUT);
-}
+extern void setup(void);
 
 void loop() {
-  digitalWrite(ledPin, HIGH);
+  digitalWrite(LED_PIN, HIGH);
   delay(1000);
-  digitalWrite(ledPin, LOW);
-  delay(1000);
+  digitalWrite(LED_PIN, LOW);
+  delay(4000);
 }
 
 

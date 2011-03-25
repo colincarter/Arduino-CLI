@@ -3,6 +3,7 @@
 *.elf
 *.d
 depends.mk
-build/*
+**/build/*
+*.komodoproject
 
 
