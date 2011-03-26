@@ -122,19 +122,18 @@
 ifneq (ARDUINO_DIR,)
 
 ifndef AVR_TOOLS_PATH
-AVR_TOOLS_PATH    = $(ARDUINO_DIR)/hardware/tools/avr/bin
+AVR_TOOLS_PATH    = /usr/bin
 endif
 
 ifndef ARDUINO_ETC_PATH
-ARDUINO_ETC_PATH  = $(ARDUINO_DIR)/hardware/tools/avr/etc
+ARDUINO_ETC_PATH  = $(ARDUINO_DIR)/hardware/tools
 endif
 
 ifndef AVRDUDE_CONF
 AVRDUDE_CONF     = $(ARDUINO_ETC_PATH)/avrdude.conf
 endif
 
-ARDUINO_LIB_PATH  = $(ARDUINO_DIR)/hardware/libraries
-#ARDUINO_LIB_PATH  = $(ARDUINO_DIR)/libraries
+ARDUINO_LIB_PATH  = $(ARDUINO_DIR)/libraries
 ARDUINO_CORE_PATH = $(ARDUINO_DIR)/hardware/arduino/cores/arduino
 
 endif
@@ -298,7 +297,7 @@ ifndef AVRDUDE
 AVRDUDE          = $(AVR_TOOLS_PATH)/avrdude
 endif
 
-AVRDUDE_COM_OPTS = -q -V -p $(MCU)
+AVRDUDE_COM_OPTS = -D -q -V -p $(MCU)
 ifdef AVRDUDE_CONF
 AVRDUDE_COM_OPTS += -C $(AVRDUDE_CONF)
 endif

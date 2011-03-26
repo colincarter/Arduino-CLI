@@ -1,0 +1,69 @@
+TARGET              = 'servo'
+AVRDUDE_PROGRAMMER  = 'arduino'
+MCU                 = 'atmega328p'
+F_CPU               = '16000000'
+ARDUINO_PORT        = '/dev/ttyACM0'
+AVRDUDE_BAUDRATE    = '115200'
+ARDUINO_LIBS        = ['Servo', 'Ethernet']
+ARDUINO_CORE_DIR  = '../arduino/hardware/arduino/cores/arduino'
+ARDUINO_LIB_DIR   = '../arduino/libraries'
+BUILD_DIR         = './build'
+
+
+AVR_TOOLS_PATH    = '/usr/bin'
+CC      = "#{AVR_TOOLS_PATH}/avr-gcc"
+CXX     = "#{AVR_TOOLS_PATH}/avr-g++"
+OBJCOPY = "#{AVR_TOOLS_PATH}/avr-objcopy"
+OBJDUMP = "#{AVR_TOOLS_PATH}/avr-objdump"
+AR      = "#{AVR_TOOLS_PATH}/avr-ar"
+SIZE    = "#{AVR_TOOLS_PATH}/avr-size"
+NM      = "#{AVR_TOOLS_PATH}/avr-nm"
+REMOVE  = 'rm -f'
+MV      = 'mv -f'
+CAT     = 'cat'
+ECHO    = 'echo'
+
+libscpp = ARDUINO_LIBS.map { |lib| File.expand_path(File.join(ARDUINO_LIB_DIR, lib, '**/*.cpp')) }
+libsc = ARDUINO_LIBS.map { |lib| File.expand_path(File.join(ARDUINO_LIB_DIR, lib, '**/*.c')) }
+
+libs_includes= []
+ARDUINO_LIBS.each do |lib|
+  libs_includes << "-I#{File.expand_path(File.join(ARDUINO_LIB_DIR, lib))}"
+end
+
+CPPFLAGS = "-mmcu=#{MCU} -DF_CPU=#{F_CPU} " \
+           "-I. -I#{ARDUINO_CORE_DIR} " \
+           "#{libs_includes.join(' ')} -g -Os -w -Wall " \
+          "-ffunction-sections -fdata-sections"
+
+CFLAGS        = '-std=gnu99'
+CXXFLAGS      = '-fno-exceptions'
+ASFLAGS       = "-mmcu=#{MCU} -I. -x assembler-with-cpp"
+LDFLAGS       = "-mmcu=#{MCU} -lm -Wl,--gc-sections -Os"
+
+compile_set = FileList.new([File.expand_path("./**/*.cpp"),
+                            File.expand_path("./**/*.c"),
+                            File.expand_path("#{ARDUINO_CORE_DIR}/**/*.c"),
+                            File.expand_path("#{ARDUINO_CORE_DIR}/**/*.cpp"),
+                            libscpp, libsc])
+
+build_dir = File.expand_path(File.join(File.dirname(__FILE__), BUILD_DIR))
+
+
+compile_set.each do |src|
+  rule ""
+end
+rule '.o' => '.c' do
+
+end
+
+task :default => [:build]
+
+task :build => ["#{build_dir}/#{TARGET}.hex"] do
+
+end
+
+def find_source(objfile, ext)
+  base = File.basename(objfile, '.o')
+  SRC.find { |s| File.basename(s, ext) == base }
+end
